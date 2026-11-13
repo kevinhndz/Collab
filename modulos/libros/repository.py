@@ -15,6 +15,13 @@ def validar(db: Session, json: LibroCrear) -> Libro | None:
     return db.query(Libro).filter(Libro.titulo == json.titulo).first()
 
 
+def obtener_por_id(db: Session, libro_id: int) -> Libro | None:
+    return db.query(Libro).filter(Libro.id == libro_id).first()
+
+
+def eliminar(db: Session, libro: Libro) -> None:
+    db.delete(libro)
+    db.commit()
 def obtener_todos(db: Session) -> list[Libro]:
     return db.query(Libro).all()
 

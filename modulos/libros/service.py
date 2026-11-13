@@ -29,3 +29,13 @@ def obtener_libro(db: Session, libro_id: int):
             detail="Libro no encontrado.",
         )
     return libro
+
+
+def eliminar_libro(db: Session, libro_id: int):
+    libro = repository.obtener_por_id(db, libro_id)
+    if libro is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Libro no encontrado.",
+        )
+    repository.eliminar(db, libro)
