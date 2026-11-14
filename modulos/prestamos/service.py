@@ -15,3 +15,13 @@ def crear_prestamo(db: Session, json: PrestamoCrear):
         )
     prestamo = Prestamo(usuario_id=json.usuario_id, libro_id=json.libro_id)
     return repository.crear(db, prestamo)
+
+
+def eliminar_prestamo(db: Session, prestamo_id: int):
+    prestamo = repository.obtener_por_id(db, prestamo_id)
+    if prestamo is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Prestamo no encontrado.",
+        )
+    repository.eliminar(db, prestamo)
