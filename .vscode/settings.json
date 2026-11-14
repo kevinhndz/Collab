@@ -1,0 +1,42 @@
+{
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-workflow.json": [
+      ".github/workflows/*.yml",
+      ".github/workflows/*.yaml"
+    ]
+  },
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "editor.inlineSuggest.enabled": true,
+  "[github-actions-workflow]": {
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
+    },
+    "editor.suggestOnTriggerCharacters": true,
+    "editor.autoIndent": "advanced",
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.formatOnType": true,
+    "editor.inlineSuggest.enabled": true
+  },
+  "[yaml]": {
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
+    },
+    "editor.suggestOnTriggerCharacters": true,
+    "editor.autoIndent": "advanced",
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.formatOnType": true
+  },
+  "github.copilot.enable": {
+    "*": true,
+    "yaml": true,
+    "github-actions-workflow": true
+  }
+}

@@ -41,10 +41,11 @@ def test_ver_un_libro():
 
 def test_borrar_libro():
     cliente = TestClient(app)
+    titulo = f"Libro para borrar {uuid4()}"
 
     respuesta = cliente.post(
         "/libros/",
-        json={"titulo": "Libro para borrar", "autor": "Autor de prueba"},
+        json={"titulo": titulo, "autor": "Autor de prueba"},
     )
     libro_id = respuesta.json()["id"]
 
