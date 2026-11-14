@@ -20,3 +20,12 @@ def validar(db: Session, json: PrestamoCrear) -> Prestamo | None:
         )
         .first()
     )
+
+
+def obtener_por_id(db: Session, prestamo_id: int) -> Prestamo | None:
+    return db.query(Prestamo).filter(Prestamo.id == prestamo_id).first()
+
+
+def eliminar(db: Session, prestamo: Prestamo) -> None:
+    db.delete(prestamo)
+    db.commit()
