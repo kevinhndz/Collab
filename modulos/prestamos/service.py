@@ -1,5 +1,8 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
+from modulos.prestamos.schema import PrestamoActualizar
+from modulos.usuarios import repository as usuarios_repository
+from modulos.libros import repository as libros_repository
 
 from modulos.prestamos import repository
 from modulos.prestamos.schema import PrestamoCrear
@@ -27,5 +30,30 @@ def eliminar_prestamo(db: Session, prestamo_id: int):
     repository.eliminar(db, prestamo)
 
 
+def actualizar_prestamo(db: Session, prestamo_id: int, json: PrestamoActualizar):
+    prestamo = repository.obtener_por_id(db, prestamo_id)
+    if prestamo is None:
+        raise HTTPException(status_code=404, detail="Prestamo no encontrado.")
+
+    datos = json.model_dump(exclude_unset=True)
+    usuario_id = datos.get("usuario_id", prestamo.usuario_id)
+    libro_id = datos.get("libro_id", prestamo.libro_id)
+
+    if usuarios_repository.obtener_por_id(db, usuario_id) is None:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado.")
+    if libros_repository.obtener_por_id(db, libro_id) is None:
+        raise HTTPException(status_code=404, detail="Libro no encontrado.")
+
+    combinacion = PrestamoCrear(usuario_id=usuario_id, libro_id=libro_id)
+    look_up = repository.validar(db, combinacion)
+    if look_up is not None and look_up.id != prestamo_id:
+        raise HTTPException(status_code=409, detail="El prestamo ya existe.")
+
+    prestamo.usuario_id = usuario_id
+    prestamo.libro_id = libro_id
+    return repository.actualizar(db, prestamo)
+
+
 def obtener_prestamos(db: Session):
     return repository.obtener_todos(db)
+
