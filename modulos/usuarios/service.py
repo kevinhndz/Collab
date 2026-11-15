@@ -2,7 +2,7 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from modulos.usuarios import repository
-from modulos.usuarios.schema import UsuarioCrear
+from modulos.usuarios.schema import UsuarioActualizar, UsuarioCrear
 from modulos.usuarios.tablas import Usuario
 
 
@@ -26,3 +26,26 @@ def obtener_usuario(db: Session, usuario_id: int):
             detail="Usuario no encontrado.",
         )
     return usuario
+
+
+def actualizar_usuario(db: Session, usuario_id: int, json: UsuarioActualizar):
+    usuario = repository.obtener_por_id(db, usuario_id)
+    if usuario is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Usuario no encontrado.",
+        )
+
+    datos = json.model_dump(exclude_unset=True)
+    if "email" in datos:
+        look_up = repository.obtener_por_email(db, datos["email"], usuario_id)
+        if look_up is not None:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Ya existe un usuario con ese correo electronico.",
+            )
+
+    for campo, valor in datos.items():
+        setattr(usuario, campo, valor)
+
+    return repository.actualizar(db, usuario)
