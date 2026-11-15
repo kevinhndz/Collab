@@ -29,3 +29,9 @@ def obtener_por_id(db: Session, prestamo_id: int) -> Prestamo | None:
 def eliminar(db: Session, prestamo: Prestamo) -> None:
     db.delete(prestamo)
     db.commit()
+
+
+def actualizar(db: Session, prestamo: Prestamo) -> Prestamo:
+    db.commit()
+    db.refresh(prestamo)
+    return prestamo
