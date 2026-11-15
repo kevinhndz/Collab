@@ -2,7 +2,7 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from modulos.libros import repository
-from modulos.libros.schema import LibroCrear
+from modulos.libros.schema import LibroActualizar, LibroCrear
 from modulos.libros.tablas import Libro
 
 
@@ -41,11 +41,16 @@ def eliminar_libro(db: Session, libro_id: int):
     repository.eliminar(db, libro)
 
 
-def actualizar_prestamo(db: Session, prestamo_id: int, json: PrestamoActualizar):
-    prestamo = repository.obtener_por_id(db, prestamo_id)
-    if prestamo is None:
-        raise HTTPException(status_code=404, detail="Prestamo no encontrado.")
+def actualizar_libro(db: Session, libro_id: int, json: LibroActualizar):
+    libro = obtener_libro(db, libro_id)
     datos = json.model_dump(exclude_unset=True)
+    if "titulo" in datos:
+        look_up = repository.validar(db, json)
+        if look_up is not None and look_up.id != libro_id:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Ya existe un libro con ese titulo.",
+            )
     for campo, valor in datos.items():
-        setattr(prestamo, campo, valor)
-    return repository.actualizar(db, prestamo)
+        setattr(libro, campo, valor)
+    return repository.actualizar(db, libro)

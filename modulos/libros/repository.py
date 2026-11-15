@@ -22,15 +22,13 @@ def obtener_por_id(db: Session, libro_id: int) -> Libro | None:
 def eliminar(db: Session, libro: Libro) -> None:
     db.delete(libro)
     db.commit()
+
+
 def obtener_todos(db: Session) -> list[Libro]:
     return db.query(Libro).all()
 
 
-def obtener_por_id(db: Session, libro_id: int) -> Libro | None:
-    return db.query(Libro).filter(Libro.id == libro_id).first()
-
-
-def actualizar(db: Session, prestamo: Prestamo) -> Prestamo:
+def actualizar(db: Session, libro: Libro) -> Libro:
     db.commit()
-    db.refresh(prestamo)
-    return prestamo
+    db.refresh(libro)
+    return libro

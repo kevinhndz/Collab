@@ -1,5 +1,6 @@
 from fastapi.testclient import TestClient
 from uuid import uuid4
+import pytest
 
 from main import app
 
@@ -56,3 +57,38 @@ def test_borrar_libro():
     respuesta = cliente.get(f"/libros/{libro_id}")
 
     assert respuesta.status_code == 404
+
+
+def test_actualizar_libro_patch():
+    cliente = TestClient(app)
+    creado = cliente.post(
+        "/libros/", json={"titulo": "Libro PATCH", "autor": "Autor original"}
+    )
+    assert creado.status_code == 201
+    libro_id = creado.json()["id"]
+    respuesta = cliente.patch(f"/libros/{libro_id}", json={"autor": "Autor nuevo"})
+    assert respuesta.status_code == 200
+    assert respuesta.json()["titulo"] == "Libro PATCH"
+    assert respuesta.json()["autor"] == "Autor nuevo"
+    assert cliente.get(f"/libros/{libro_id}").json()["autor"] == "Autor nuevo"
+
+
+def test_patch_libro_inexistente():
+    cliente = TestClient(app)
+    assert cliente.patch("/libros/999999", json={"autor": "Otro"}).status_code == 404
+
+
+@pytest.mark.parametrize("datos", [{"titulo": None}, {"autor": None}, {"titulo": ""}])
+def test_patch_libro_datos_invalidos(datos):
+    cliente = TestClient(app)
+    assert cliente.patch("/libros/1", json=datos).status_code == 422
+
+
+def test_patch_libro_titulo_duplicado():
+    cliente = TestClient(app)
+    cliente.post("/libros/", json={"titulo": "Ocupado", "autor": "Autor"})
+    creado = cliente.post("/libros/", json={"titulo": "Otro", "autor": "Autor"})
+    libro_id = creado.json()["id"]
+    respuesta = cliente.patch(f"/libros/{libro_id}", json={"titulo": "Ocupado"})
+    assert respuesta.status_code == 409
+    assert cliente.get(f"/libros/{libro_id}").json()["titulo"] == "Otro"

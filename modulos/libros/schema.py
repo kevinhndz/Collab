@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class LibroCrear(BaseModel):
@@ -11,6 +11,13 @@ class LibroRespuesta(LibroCrear):
     model_config = ConfigDict(from_attributes=True)
 
 
-class PrestamoActualizar(BaseModel):
-    usuario_id: int | None = Field(default=None, gt=0)
-    libro_id: int | None = Field(default=None, gt=0)
+class LibroActualizar(BaseModel):
+    titulo: str | None = Field(default=None, min_length=1, max_length=255)
+    autor: str | None = Field(default=None, min_length=1, max_length=255)
+
+    @field_validator("titulo", "autor")
+    @classmethod
+    def validar_campo(cls, valor):
+        if valor is None:
+            raise ValueError("El campo no puede ser nulo.")
+        return valor
