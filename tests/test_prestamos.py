@@ -27,3 +27,10 @@ def test_crear_prestamo():
     )
 
     assert respuesta.status_code == 201
+
+
+def test_obtener_prestamos():
+    cliente = TestClient(app)
+    respuesta = cliente.get("/prestamos/")
+    assert respuesta.status_code == 200
+    assert isinstance(respuesta.json(), list)
