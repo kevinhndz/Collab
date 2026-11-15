@@ -17,3 +17,7 @@ def validar(db: Session, json: UsuarioCrear) -> Usuario | None:
 
 def obtener_por_id(db: Session, usuario_id: int) -> Usuario | None:
     return db.query(Usuario).filter(Usuario.id == usuario_id).first()
+
+def eliminar(db: Session, usuario: Usuario) -> None:
+    db.delete(usuario)
+    db.commit()

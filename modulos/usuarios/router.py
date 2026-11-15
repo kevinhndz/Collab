@@ -17,4 +17,8 @@ def crear_usuario(json: UsuarioCrear, db: Session = Depends(get_db)):
 def obtener_usuario(id: int, db: Session = Depends(get_db)):
     return service.obtener_usuario(db, id)
 
+@router.delete("/{id}", status_code=204)
+def eliminar_usuario(id: int, db: Session = Depends(get_db)):
+    return service.eliminar_usuario(db, id)
+
 
