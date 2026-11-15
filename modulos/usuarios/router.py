@@ -11,3 +11,10 @@ router = APIRouter(prefix="/usuarios", tags=["Usuarios"])
 @router.post("/", response_model=UsuarioRespuesta, status_code=201)
 def crear_usuario(json: UsuarioCrear, db: Session = Depends(get_db)):
     return service.crear_usuario(db, json)
+
+
+@router.get("/{id}", response_model=UsuarioRespuesta)
+def obtener_usuario(id: int, db: Session = Depends(get_db)):
+    return service.obtener_usuario(db, id)
+
+

@@ -13,3 +13,7 @@ def crear(db: Session, usuario: Usuario) -> Usuario:
 
 def validar(db: Session, json: UsuarioCrear) -> Usuario | None:
     return db.query(Usuario).filter(Usuario.email == json.email).first()
+
+
+def obtener_por_id(db: Session, usuario_id: int) -> Usuario | None:
+    return db.query(Usuario).filter(Usuario.id == usuario_id).first()
