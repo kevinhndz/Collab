@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from database.almacen import get_db
 from modulos.usuarios import service
-from modulos.usuarios.schema import UsuarioCrear, UsuarioRespuesta
+from modulos.usuarios.schema import UsuarioActualizar, UsuarioCrear, UsuarioRespuesta
 
 router = APIRouter(prefix="/usuarios", tags=["Usuarios"])
 
@@ -18,3 +18,8 @@ def obtener_usuario(id: int, db: Session = Depends(get_db)):
     return service.obtener_usuario(db, id)
 
 
+@router.patch("/{id}", response_model=UsuarioRespuesta)
+def actualizar_usuario(
+    id: int, json: UsuarioActualizar, db: Session = Depends(get_db)
+):
+    return service.actualizar_usuario(db, id, json)
