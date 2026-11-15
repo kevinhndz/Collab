@@ -15,3 +15,14 @@ def crear_usuario(db: Session, json: UsuarioCrear):
         )
     usuario = Usuario(nombre=json.nombre, email=json.email)
     return repository.crear(db, usuario)
+
+
+
+def obtener_usuario(db: Session, usuario_id: int):
+    usuario = repository.obtener_por_id(db, usuario_id)
+    if usuario is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Usuario no encontrado.",
+        )
+    return usuario
