@@ -18,5 +18,9 @@ def eliminar_prestamo(prestamo_id: int, db: Session = Depends(get_db)):
     service.eliminar_prestamo(db, prestamo_id)
 
 
-def obtener_todos(db: Session) -> list[Prestamo]:
-    return db.query(Prestamo).all()
+@router.get("/", response_model=list[PrestamoRespuesta])
+def listar_prestamos(db: Session = Depends(get_db)):
+    return service.obtener_prestamos(db)
+
+
+
