@@ -28,7 +28,6 @@ def obtener_usuario(db: Session, usuario_id: int):
     return usuario
 
 
-def eliminar_usuario(db: Session, usuario_id: int):
 def actualizar_usuario(db: Session, usuario_id: int, json: UsuarioActualizar):
     usuario = repository.obtener_por_id(db, usuario_id)
     if usuario is None:
@@ -36,8 +35,6 @@ def actualizar_usuario(db: Session, usuario_id: int, json: UsuarioActualizar):
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Usuario no encontrado.",
         )
-    repository.eliminar(db, usuario)
-
     datos = json.model_dump(exclude_unset=True)
     if "email" in datos:
         look_up = repository.obtener_por_email(db, datos["email"], usuario_id)
@@ -51,3 +48,13 @@ def actualizar_usuario(db: Session, usuario_id: int, json: UsuarioActualizar):
         setattr(usuario, campo, valor)
 
     return repository.actualizar(db, usuario)
+
+
+def eliminar_usuario(db: Session, usuario_id: int):
+    usuario = repository.obtener_por_id(db, usuario_id)
+    if usuario is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Usuario no encontrado.",
+        )
+    repository.eliminar(db, usuario)
