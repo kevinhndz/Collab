@@ -20,6 +20,7 @@ def eliminar_prestamo(prestamo_id: int, db: Session = Depends(get_db)):
     service.eliminar_prestamo(db, prestamo_id)
 
 
+
 @router.patch("/{prestamo_id}", response_model=PrestamoRespuesta)
 def actualizar_prestamo(
     prestamo_id: int,
@@ -27,3 +28,10 @@ def actualizar_prestamo(
     db: Session = Depends(get_db),
 ):
     return service.actualizar_prestamo(db, prestamo_id, json)
+
+
+@router.get("/", response_model=list[PrestamoRespuesta])
+def listar_prestamos(db: Session = Depends(get_db)):
+    return service.obtener_prestamos(db)
+
+

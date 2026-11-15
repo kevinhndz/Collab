@@ -35,3 +35,8 @@ def actualizar(db: Session, prestamo: Prestamo) -> Prestamo:
     db.commit()
     db.refresh(prestamo)
     return prestamo
+
+
+def obtener_todos(db: Session) -> list[Prestamo]:
+    return db.query(Prestamo).all()
+

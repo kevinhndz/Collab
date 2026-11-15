@@ -63,3 +63,11 @@ def test_actualizar_prestamo_patch():
     guardado = cliente.patch(f"/prestamos/{prestamo_id}", json={})
     assert guardado.status_code == 200
     assert guardado.json() == respuesta.json()
+
+
+def test_obtener_prestamos():
+    cliente = TestClient(app)
+    respuesta = cliente.get("/prestamos/")
+    assert respuesta.status_code == 200
+    assert isinstance(respuesta.json(), list)
+

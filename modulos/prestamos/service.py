@@ -52,3 +52,8 @@ def actualizar_prestamo(db: Session, prestamo_id: int, json: PrestamoActualizar)
     prestamo.usuario_id = usuario_id
     prestamo.libro_id = libro_id
     return repository.actualizar(db, prestamo)
+
+
+def obtener_prestamos(db: Session):
+    return repository.obtener_todos(db)
+
