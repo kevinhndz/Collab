@@ -24,3 +24,12 @@ def listar_libros(db: Session = Depends(get_db)):
 def obtener_libro(libro_id: int, db: Session = Depends(get_db)):
     return service.obtener_libro(db, libro_id)
 
+
+@router.put("/{libro_id}", response_model=LibroRespuesta)
+def reemplazar_libro(
+    libro_id: int,
+    json: LibroCrear,
+    db: Session = Depends(get_db),
+):
+    return service.reemplazar_libro(db, libro_id, json)
+
