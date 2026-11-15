@@ -17,3 +17,17 @@ def validar(db: Session, json: UsuarioCrear) -> Usuario | None:
 
 def obtener_por_id(db: Session, usuario_id: int) -> Usuario | None:
     return db.query(Usuario).filter(Usuario.id == usuario_id).first()
+
+
+def obtener_por_email(db: Session, email: str, usuario_id: int) -> Usuario | None:
+    return (
+        db.query(Usuario)
+        .filter(Usuario.email == email, Usuario.id != usuario_id)
+        .first()
+    )
+
+
+def actualizar(db: Session, usuario: Usuario) -> Usuario:
+    db.commit()
+    db.refresh(usuario)
+    return usuario
