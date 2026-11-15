@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from database.almacen import get_db
 from modulos.libros import service
-from modulos.libros.schema import LibroCrear, LibroRespuesta
+from modulos.libros.schema import LibroActualizar, LibroCrear, LibroRespuesta
 
 router = APIRouter(prefix="/libros", tags=["Libros"])
 
@@ -24,3 +24,20 @@ def listar_libros(db: Session = Depends(get_db)):
 def obtener_libro(libro_id: int, db: Session = Depends(get_db)):
     return service.obtener_libro(db, libro_id)
 
+
+@router.put("/{libro_id}", response_model=LibroRespuesta)
+def reemplazar_libro(
+    libro_id: int,
+    json: LibroCrear,
+    db: Session = Depends(get_db),
+):
+    return service.reemplazar_libro(db, libro_id, json)
+
+
+@router.patch("/{libro_id}", response_model=LibroRespuesta)
+def actualizar_libro(
+    libro_id: int,
+    json: LibroActualizar,
+    db: Session = Depends(get_db),
+):
+    return service.actualizar_libro(db, libro_id, json)
