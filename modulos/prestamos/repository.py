@@ -29,3 +29,6 @@ def obtener_por_id(db: Session, prestamo_id: int) -> Prestamo | None:
 def eliminar(db: Session, prestamo: Prestamo) -> None:
     db.delete(prestamo)
     db.commit()
+
+def obtener_todos(db: Session) -> list[Prestamo]:
+    return db.query(Prestamo).all()

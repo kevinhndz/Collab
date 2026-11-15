@@ -25,3 +25,7 @@ def eliminar_prestamo(db: Session, prestamo_id: int):
             detail="Prestamo no encontrado.",
         )
     repository.eliminar(db, prestamo)
+
+
+def obtener_prestamos(db: Session):
+    return repository.obtener_todos(db)
