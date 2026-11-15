@@ -39,3 +39,12 @@ def eliminar_libro(db: Session, libro_id: int):
             detail="Libro no encontrado.",
         )
     repository.eliminar(db, libro)
+
+
+def reemplazar_libro(db: Session, libro_id: int, json: LibroCrear):
+    libro = repository.obtener_por_id(db, libro_id)
+    if libro is None:
+        raise HTTPException(status_code=404, detail="Libro no encontrado.")
+    libro.titulo = json.titulo
+    libro.autor = json.autor
+    return repository.actualizar(db, libro)
