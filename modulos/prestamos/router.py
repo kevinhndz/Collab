@@ -16,3 +16,7 @@ def crear_prestamo(json: PrestamoCrear, db: Session = Depends(get_db)):
 @router.delete("/{prestamo_id}", status_code=204)
 def eliminar_prestamo(prestamo_id: int, db: Session = Depends(get_db)):
     service.eliminar_prestamo(db, prestamo_id)
+
+
+def obtener_todos(db: Session) -> list[Prestamo]:
+    return db.query(Prestamo).all()
