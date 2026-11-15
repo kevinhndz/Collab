@@ -28,3 +28,8 @@ def obtener_todos(db: Session) -> list[Libro]:
 
 def obtener_por_id(db: Session, libro_id: int) -> Libro | None:
     return db.query(Libro).filter(Libro.id == libro_id).first()
+
+def actualizar(db: Session, libro: Libro) -> Libro:
+    db.commit()
+    db.refresh(libro)
+    return libro
