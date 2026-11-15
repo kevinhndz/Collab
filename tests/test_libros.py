@@ -56,3 +56,18 @@ def test_borrar_libro():
     respuesta = cliente.get(f"/libros/{libro_id}")
 
     assert respuesta.status_code == 404
+
+
+def test_reemplazar_libro_put():
+    cliente = TestClient(app)
+    creado = cliente.post(
+        "/libros/",
+        json={"titulo": "Libro PUT", "autor": "Autor"},
+    )
+    libro_id = creado.json()["id"]
+    respuesta = cliente.put(
+        f"/libros/{libro_id}",
+        json={"titulo": "Libro cambiado", "autor": "Autor cambiado"},
+    )
+    assert respuesta.status_code == 200
+    assert respuesta.json()["titulo"] == "Libro cambiado"
