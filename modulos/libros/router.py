@@ -24,3 +24,11 @@ def listar_libros(db: Session = Depends(get_db)):
 def obtener_libro(libro_id: int, db: Session = Depends(get_db)):
     return service.obtener_libro(db, libro_id)
 
+
+@router.patch("/{prestamo_id}", response_model=PrestamoRespuesta)
+def actualizar_prestamo(
+    prestamo_id: int,
+    json: PrestamoActualizar,
+    db: Session = Depends(get_db),
+):
+    return service.actualizar_prestamo(db, prestamo_id, json)

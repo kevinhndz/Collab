@@ -39,3 +39,13 @@ def eliminar_libro(db: Session, libro_id: int):
             detail="Libro no encontrado.",
         )
     repository.eliminar(db, libro)
+
+
+def actualizar_prestamo(db: Session, prestamo_id: int, json: PrestamoActualizar):
+    prestamo = repository.obtener_por_id(db, prestamo_id)
+    if prestamo is None:
+        raise HTTPException(status_code=404, detail="Prestamo no encontrado.")
+    datos = json.model_dump(exclude_unset=True)
+    for campo, valor in datos.items():
+        setattr(prestamo, campo, valor)
+    return repository.actualizar(db, prestamo)

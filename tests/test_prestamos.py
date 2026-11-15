@@ -27,3 +27,12 @@ def test_crear_prestamo():
     )
 
     assert respuesta.status_code == 201
+
+
+def test_actualizar_prestamo_patch():
+    cliente = TestClient(app)
+    respuesta = cliente.patch(
+        f"/prestamos/{prestamo_id}",
+        json={"libro_id": libro_id},
+    )
+    assert respuesta.status_code == 200

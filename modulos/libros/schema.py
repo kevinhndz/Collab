@@ -9,3 +9,8 @@ class LibroCrear(BaseModel):
 class LibroRespuesta(LibroCrear):
     id: int
     model_config = ConfigDict(from_attributes=True)
+
+
+class PrestamoActualizar(BaseModel):
+    usuario_id: int | None = Field(default=None, gt=0)
+    libro_id: int | None = Field(default=None, gt=0)
