@@ -1,7 +1,17 @@
 from sqlalchemy.orm import Session
-
 from modulos.aulas import repository
+from fastapi import HTTPException
+from modulos.aulas.schema import AulaCrear
 
 
 def obtener_aulas(db: Session):
     return repository.obtener_todos(db)
+
+
+def reemplazar_aula(db: Session, aula_id: int, datos: AulaCrear):
+    aula = repository.obtener_por_id(db, aula_id)
+    if aula is None:
+        raise HTTPException(status_code=404, detail="Aula no encontrada.")
+    aula.nombre = datos.nombre
+    aula.capacidad = datos.capacidad
+    return repository.actualizar(db, aula)
