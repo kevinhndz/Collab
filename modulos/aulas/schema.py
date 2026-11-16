@@ -9,3 +9,8 @@ class AulaCrear(BaseModel):
 class AulaRespuesta(AulaCrear):
     id: int
     model_config = ConfigDict(from_attributes=True)
+
+
+class AulaActualizar(BaseModel):
+    nombre: str | None = Field(default=None, min_length=1, max_length=255)
+    capacidad: int | None = Field(default=None, gt=0)
