@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-
 from database.almacen import get_db
 from modulos.aulas import service
 from modulos.aulas.schema import AulaCrear, AulaRespuesta
+from modulos.aulas.schema import AulaActualizar, AulaRespuesta
 
 router = APIRouter(prefix="/aulas", tags=["Aulas"])
 
@@ -15,3 +15,12 @@ def listar_aulas(db: Session = Depends(get_db)):
 @router.put("/{aula_id}", response_model=AulaRespuesta)
 def reemplazar_aula(aula_id: int, datos: AulaCrear, db: Session = Depends(get_db)):
     return service.reemplazar_aula(db, aula_id, datos)
+
+
+@router.patch("/{aula_id}", response_model=AulaRespuesta)
+def actualizar_aula(
+    aula_id: int,
+    datos: AulaActualizar,
+    db: Session = Depends(get_db),
+):
+    return service.actualizar_aula(db, aula_id, datos)

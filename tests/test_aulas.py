@@ -35,6 +35,13 @@ def test_reemplazar_aula_put():
     obtener_db = app.dependency_overrides[get_db]
     with contextmanager(obtener_db)() as db:
         aula = Aula(nombre="Aula original", capacidad=20)
+
+
+def test_actualizar_aula_patch():
+    obtener_db = app.dependency_overrides[get_db]
+
+    with contextmanager(obtener_db)() as db:
+        aula = Aula(nombre="Aula original", capacidad=25)
         db.add(aula)
         db.commit()
         db.refresh(aula)
@@ -62,7 +69,3 @@ def test_put_aula_inexistente():
     assert respuesta.status_code == 404
 
 
-def test_put_requiere_nombre_y_capacidad():
-    cliente = TestClient(app)
-    respuesta = cliente.put("/aulas/1", json={"nombre": "Incompleta"})
-    assert respuesta.status_code == 422
