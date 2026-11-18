@@ -15,3 +15,5 @@ def actualizar(db: Session, aula: Aula) -> Aula:
     db.commit()
     db.refresh(aula)
     return aula
+
+
